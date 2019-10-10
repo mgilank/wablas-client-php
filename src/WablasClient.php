@@ -1,19 +1,21 @@
 <?php
 
+namespace Wablas;
+
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\RequestOptions;
 
 
 class WablasClient {
-    
-    protected $wablasEndpoint = 'https://wablas.com/api';
+
+    protected $wablasEndpoint = 'https://console.wablas.com/api';
     protected $apiToken;
     protected $recipients = [];
     protected $httpClient;
     protected $headers;
 
     public function __construct($apiToken) {
-        $this->apiToken = $api->apiToken;
+        $this->apiToken = $apiToken;
         $this->headers = [
             'Accept' => 'application/json',
             'Authorization' => $this->apiToken,
@@ -31,25 +33,25 @@ class WablasClient {
 
     public function sendMessage($message, $type = 'random') {
         if (!empty($this->recipients)) {
-            $res = $this->httpClient->post('/send-message', [
+            $res = $this->httpClient->post('/api/send-message', [
                 RequestOptions::HEADERS => $this->headers,
                 RequestOptions::FORM_PARAMS => [
                     'phone'     => implode(", ", $this->recipients),
                     'message'   => $message,
                     'type'      => $type
                 ],
-            ]); 
+            ]);
 
             return $res->getBody();
         }
-       
+
 
         return false;
     }
 
     public function sendImage($imageCaption, $imageUrl) {
         if (!empty($this->recipients)) {
-            $res = $this->httpClient->post('/send-image', [
+            $res = $this->httpClient->post('/api/send-message', [
                 RequestOptions::HEADERS => $this->headers,
                 RequestOptions::FORM_PARAMS => [
                     'phone'     => implode(", ", $this->recipients),
@@ -57,7 +59,7 @@ class WablasClient {
                     'image'     => $imageUrl,
                     'type'      => $type
                 ],
-            ]); 
+            ]);
         }
     }
 
